@@ -36,16 +36,9 @@ const OBJECT_TYPES: {
   { 
     type: 'robot', 
     label: 'Robot', 
-    description: 'Manipulator', 
+    description: 'Manipulator (includes gripper)', 
     color: 'bg-purple-600/10',
     borderColor: 'border-purple-600/30'
-  },
-  { 
-    type: 'gripper', 
-    label: 'Gripper', 
-    description: 'End effector', 
-    color: 'bg-pink-600/10',
-    borderColor: 'border-pink-600/30'
   },
 ];
 
@@ -77,6 +70,8 @@ export function ObjectLibrary() {
             <button
               key={type}
               onClick={() => handleObjectClick(type)}
+              aria-label={`Place ${label} object in scene`}
+              aria-pressed={isActive}
               className={`w-full text-left px-4 py-3 rounded-lg border transition-all duration-200 ${
                 isActive
                   ? `border-blue-600 ${color} ring-1 ring-blue-600/20`

@@ -5,6 +5,9 @@
 import { ReactNode } from 'react';
 import { ObjectLibrary } from './ObjectLibrary';
 import { PropertiesPanel } from './PropertiesPanel';
+import { PathPanel } from './PathPanel';
+import { SimulationPanel } from './SimulationPanel';
+import { TabbedPanel } from './TabbedPanel';
 
 interface LayoutProps {
   children: ReactNode;
@@ -37,9 +40,28 @@ export function Layout({ children }: LayoutProps) {
         {/* 3D Viewport */}
         <main className="flex-1 relative overflow-hidden">{children}</main>
 
-        {/* Right Properties Panel */}
-        <aside className="w-72 bg-gray-800 border-l border-gray-700 overflow-y-auto shadow-xl scrollbar-thin flex-shrink-0">
-          <PropertiesPanel />
+        {/* Right Tabbed Panel */}
+        <aside className="w-72 bg-gray-800 border-l border-gray-700 shadow-xl flex-shrink-0">
+          <TabbedPanel
+            tabs={[
+              {
+                id: 'properties',
+                label: 'Properties',
+                content: <PropertiesPanel />,
+              },
+              {
+                id: 'paths',
+                label: 'Paths',
+                content: <PathPanel />,
+              },
+              {
+                id: 'simulation',
+                label: 'Simulation',
+                content: <SimulationPanel />,
+              },
+            ]}
+            defaultTab="properties"
+          />
         </aside>
       </div>
     </div>

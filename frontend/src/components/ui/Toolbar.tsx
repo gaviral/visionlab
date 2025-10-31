@@ -30,7 +30,9 @@ export function Toolbar() {
       const loadedObjects = await loadSceneFromFile(file);
       setObjects(loadedObjects);
     } catch (error) {
-      alert('Failed to load scene: ' + (error as Error).message);
+      // Error is already structured by configUtils
+      const errorMessage = (error as { message?: string }).message || 'Failed to load scene';
+      alert(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -48,10 +50,17 @@ export function Toolbar() {
           size="sm"
           onClick={handleSave}
           disabled={objects.length === 0}
+          aria-label="Save current scene to JSON file"
         >
           Save Scene
         </Button>
-        <Button variant="secondary" size="sm" onClick={handleLoad} isLoading={isLoading}>
+        <Button 
+          variant="secondary" 
+          size="sm" 
+          onClick={handleLoad} 
+          isLoading={isLoading}
+          aria-label="Load scene from JSON file"
+        >
           Load Scene
         </Button>
       </div>
@@ -61,6 +70,7 @@ export function Toolbar() {
         accept=".json"
         onChange={handleFileChange}
         className="hidden"
+        aria-label="Scene JSON file input"
       />
     </>
   );

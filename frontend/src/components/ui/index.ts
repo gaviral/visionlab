@@ -7,6 +7,9 @@ export { Card } from './Card';
 export { Input } from './Input';
 export { Layout } from './Layout';
 export { ObjectLibrary } from './ObjectLibrary';
+export { PathPanel } from './PathPanel';
 export { PropertiesPanel } from './PropertiesPanel';
+export { SimulationPanel } from './SimulationPanel';
+export { TabbedPanel } from './TabbedPanel';
 export { Toolbar } from './Toolbar';
 
