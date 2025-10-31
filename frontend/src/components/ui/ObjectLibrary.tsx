@@ -56,11 +56,6 @@ export function ObjectLibrary() {
 
   const handleObjectClick = (type: ObjectType) => {
     const newMode = type === placingType ? null : type;
-    console.log('[ObjectLibrary] Setting placing mode:', { 
-      from: placingType, 
-      to: newMode,
-      type 
-    });
     setPlacingMode(newMode);
   };
 

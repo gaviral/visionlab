@@ -5,9 +5,11 @@
 import { TransformControls } from '@react-three/drei';
 import { useRef } from 'react';
 import { Mesh } from 'three';
+import { ThreeEvent } from '@react-three/fiber';
 import { useSceneStore } from '../../stores/sceneStore';
 import { vector3ToArray } from '../../utils/transformUtils';
-import type { SceneObject } from '../../types';
+import { getObjectBaseColor } from '../../utils/objectConfigUtils';
+import type { SceneObject, ObjectType } from '../../types';
 
 interface ObjectRendererProps {
   object: SceneObject;
@@ -31,9 +33,8 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
   // Check if object is colliding
   const isColliding = collisions.includes(object.id);
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
-    console.log('[ObjectRenderer] Object clicked:', { id: object.id, type: object.type });
     selectObject(object.id);
   };
 
@@ -49,26 +50,7 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
       rotation: { x: rotation.x, y: rotation.y, z: rotation.z },
       scale: { x: scale.x, y: scale.y, z: scale.z },
     };
-    console.log('[ObjectRenderer] Transform changed:', { id: object.id, updates });
     updateObject(object.id, updates);
-  };
-
-  // Get base color for object type
-  const getBaseColor = (type: string): string => {
-    switch (type) {
-      case 'camera':
-        return '#3b82f6';
-      case 'bin':
-        return '#ef4444';
-      case 'obstacle':
-        return '#f59e0b';
-      case 'robot':
-        return '#8b5cf6';
-      case 'gripper':
-        return '#ec4899';
-      default:
-        return '#6b7280';
-    }
   };
 
   // Render different geometries based on object type
@@ -88,7 +70,7 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
       opacity = 0.9;
     } else {
       // Base color
-      baseColor = getBaseColor(object.type);
+      baseColor = getObjectBaseColor(object.type as ObjectType);
       opacity = 1.0;
     }
 

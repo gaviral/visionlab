@@ -4,6 +4,7 @@
  */
 import { useRef } from 'react';
 import { Mesh } from 'three';
+import { ThreeEvent } from '@react-three/fiber';
 import { useSceneStore } from '../../stores/sceneStore';
 import { createId, createVector3 } from '../../utils/transformUtils';
 import type { SceneObject, CameraObject } from '../../types';
@@ -13,15 +14,11 @@ export function Ground() {
   const addObject = useSceneStore((state) => state.addObject);
   const placingType = useSceneStore((state) => state.placingType);
 
-  const handleClick = (event: any) => {
-    if (!placingType) {
-      console.log('[Ground] Click ignored - no placing type active');
-      return;
-    }
+  const handleClick = (event: ThreeEvent<MouseEvent>) => {
+    if (!placingType) return;
 
     event.stopPropagation();
     const { point } = event;
-    console.log('[Ground] Click detected at:', { x: point.x, y: point.y, z: point.z }, 'placingType:', placingType);
 
     // Create object based on type
     let newObject: SceneObject;
@@ -41,7 +38,6 @@ export function Ground() {
           parentRobotId: null,
         },
       } as CameraObject;
-      console.log('[Ground] Created camera object:', newObject);
     } else {
       // Create generic object
       newObject = {
@@ -52,10 +48,8 @@ export function Ground() {
         scale: createVector3(1, 1, 1),
         properties: {},
       };
-      console.log('[Ground] Created object:', newObject);
     }
 
-    console.log('[Ground] Adding object to store...');
     addObject(newObject);
   };
 

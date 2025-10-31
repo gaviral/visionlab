@@ -5,59 +5,8 @@
  * Responsibility: Detect collisions between scene objects
  * Uses AABB (Axis-Aligned Bounding Box) for performance
  */
-import type { SceneObject, Vector3 } from '../types';
-
-/**
- * Bounding box interface
- */
-export interface BoundingBox {
-  min: Vector3;
-  max: Vector3;
-}
-
-/**
- * Get bounding box for a scene object
- * Following design principles: Pure function, reusable utility
- */
-export function getObjectBoundingBox(object: SceneObject): BoundingBox {
-  const scale = object.scale;
-  const center = object.position;
-  
-  // Approximate bounding box sizes per object type
-  let size: Vector3;
-  switch (object.type) {
-    case 'camera':
-      size = { x: 0.5 * scale.x, y: 0.5 * scale.y, z: 0.5 * scale.z };
-      break;
-    case 'bin':
-      size = { x: 1 * scale.x, y: 1 * scale.y, z: 1 * scale.z };
-      break;
-    case 'obstacle':
-      size = { x: 1 * scale.x, y: 1 * scale.y, z: 1 * scale.z };
-      break;
-    case 'robot':
-      size = { x: 0.8 * scale.x, y: 1.5 * scale.y, z: 0.8 * scale.z };
-      break;
-    case 'gripper':
-      size = { x: 0.3 * scale.x, y: 0.3 * scale.y, z: 0.6 * scale.z };
-      break;
-    default:
-      size = { x: 1 * scale.x, y: 1 * scale.y, z: 1 * scale.z };
-  }
-  
-  return {
-    min: {
-      x: center.x - size.x / 2,
-      y: center.y - size.y / 2,
-      z: center.z - size.z / 2,
-    },
-    max: {
-      x: center.x + size.x / 2,
-      y: center.y + size.y / 2,
-      z: center.z + size.z / 2,
-    },
-  };
-}
+import type { SceneObject } from '../types';
+import { getObjectBoundingBox, type BoundingBox } from './boundingBoxUtils';
 
 /**
  * Check if two bounding boxes intersect (AABB collision detection)

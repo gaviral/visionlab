@@ -2,26 +2,20 @@
  * SceneContent - Main 3D scene content
  * Following design principles: Modular, composable components
  */
-import { Ground } from './Ground';
-import { ObjectRenderer } from '../objects/ObjectRenderer';
-import { RobotMovementSystem } from './RobotMovementSystem';
-import { CameraSystem } from './CameraSystem';
-import { CameraFrustum } from './CameraFrustum';
-import { VisionValidationSystem } from './VisionValidationSystem';
-import { CollisionDetector } from './CollisionDetector';
+import {
+  Ground,
+  RobotMovementSystem,
+  CameraSystem,
+  CameraFrustum,
+  VisionValidationSystem,
+  CollisionDetector,
+} from './index';
+import { ObjectRenderer } from '../objects';
 import { useSceneStore } from '../../stores/sceneStore';
-import { useEffect } from 'react';
 import type { CameraObject } from '../../types';
 
 export function SceneContent() {
   const objects = useSceneStore((state) => state.objects);
-
-  useEffect(() => {
-    console.log('[SceneContent] Objects updated:', { 
-      count: objects.length,
-      objects: objects.map(obj => ({ id: obj.id, type: obj.type, position: obj.position }))
-    });
-  }, [objects]);
 
   // Separate cameras for frustum rendering
   const cameras = objects.filter(
