@@ -1,6 +1,6 @@
 # Vision Lab - Robotic Vision Simulation Platform
 
-**End Goal:** Professional browser-based robotic vision simulation platform demonstrating React/TypeScript/Three.js mastery, aligned with AperaAI's needs. Impress interviewers by showing deep understanding of their domain (robotic vision, simulation, AI training) combined with exceptional frontend engineering skills.
+**End Goal:** Professional browser-based robotic vision simulation platform demonstrating React/TypeScript/Three.js mastery. Showcase deep understanding of robotic vision domain (simulation, AI training) combined with exceptional frontend engineering skills.
 
 **Current Status:** Phase 2 In Progress - EOAT Camera System Implemented ✅
 
@@ -38,7 +38,7 @@ Vision Lab is a browser-based no-code simulation platform for designing and visu
 - **Phase 3**: Domain-specific workflows (de-racking, bin picking)
 - **Phase 4**: Synthetic data generation (core value proposition)
 - **Phase 5**: CAD integration & digital twins
-- **Phase 6**: Production polish & export to Apera Vue
+- **Phase 6**: Production polish & export capabilities
 
 ---
 
@@ -93,7 +93,7 @@ Following design principles from `prompts/design_principles.md`:
 - **SOLID Principles**: Applied rigorously throughout codebase
 - **DRY**: Utilities extracted, no code duplication
 - **Type Safety**: Comprehensive TypeScript coverage
-- **Vision-First Approach**: Camera placement > Robot mechanics (aligned with AperaAI)
+- **Vision-First Approach**: Camera placement > Robot mechanics (vision is core technology)
 - **Professional-Grade UX**: Smooth animations, intuitive interactions
 - **Performance First**: Optimized rendering, selective updates, efficient state management
 
@@ -130,7 +130,7 @@ cdk deploy
 - **Roadmap**: See `reference/roadmap.md` for complete project roadmap
 - **Architecture**: See `frontend/ARCHITECTURE.md` for frontend architecture details
 - **Implementation Plan**: See `docs/IMPLEMENTATION.md` for Phase 2 implementation details
-- **Research**: See `docs/RESEARCH.md` for AperaAI research analysis
+- **Research**: See `reference/RESEARCH.md` for industry research analysis
 
 ---
 

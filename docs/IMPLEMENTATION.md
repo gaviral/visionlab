@@ -2,7 +2,7 @@
 
 **Goal:** Vision-first simulation focusing on camera placement, EOAT, and vision validation.
 
-**Strategic Value:** Demonstrates understanding that vision is AperaAI's core technology (not robot mechanics). Shows vision-first thinking aligned with Vue/Forge products.
+**Strategic Value:** Demonstrates understanding that vision is the core technology in robotic vision systems (not robot mechanics). Shows vision-first thinking aligned with industry best practices.
 
 **Vision-First Approach:** Camera placement and validation are MORE IMPORTANT than robot movement mechanics.
 
