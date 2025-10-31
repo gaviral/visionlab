@@ -71,6 +71,13 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
             <meshStandardMaterial color="#8b5cf6" />
           </>
         );
+      case 'gripper':
+        return (
+          <>
+            <boxGeometry args={[0.3, 0.3, 0.6]} />
+            <meshStandardMaterial color="#ec4899" />
+          </>
+        );
       default:
         return (
           <>

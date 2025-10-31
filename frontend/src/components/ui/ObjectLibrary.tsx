@@ -40,6 +40,13 @@ const OBJECT_TYPES: {
     color: 'bg-purple-600/10',
     borderColor: 'border-purple-600/30'
   },
+  { 
+    type: 'gripper', 
+    label: 'Gripper', 
+    description: 'End effector', 
+    color: 'bg-pink-600/10',
+    borderColor: 'border-pink-600/30'
+  },
 ];
 
 export function ObjectLibrary() {
