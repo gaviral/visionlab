@@ -18,6 +18,9 @@ export interface BoundingBox {
 /**
  * Get bounding box for a scene object
  * Following design principles: Pure function, reusable utility, single source of truth
+ * 
+ * @param object - Scene object to calculate bounding box for
+ * @returns BoundingBox with min and max coordinates
  */
 export function getObjectBoundingBox(object: SceneObject): BoundingBox {
   const scale = object.scale;
@@ -62,6 +65,9 @@ export function getObjectBoundingBox(object: SceneObject): BoundingBox {
 /**
  * Get bounding box corners for frustum testing
  * Following design principles: Pure function, reusable utility
+ * 
+ * @param bbox - Bounding box to get corners from
+ * @returns Array of 8 corner positions (Vector3)
  */
 export function getBoundingBoxCorners(bbox: BoundingBox): Vector3[] {
   return [

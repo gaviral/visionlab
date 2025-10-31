@@ -12,6 +12,10 @@ import { getObjectBoundingBox, getBoundingBoxCorners } from './boundingBoxUtils'
 /**
  * Check if a point is inside a camera frustum
  * Following design principles: Pure function, reusable utility
+ * 
+ * @param point - 3D point to check
+ * @param camera - Camera object with FOV and position
+ * @returns True if point is within camera frustum, false otherwise
  */
 export function isPointInFrustum(
   point: { x: number; y: number; z: number },
@@ -43,6 +47,10 @@ export function isPointInFrustum(
 /**
  * Check if an object's bounding box is visible from camera
  * Following design principles: Pure function, reusable utility
+ * 
+ * @param object - Scene object to check visibility for
+ * @param camera - Camera object to check visibility from
+ * @returns True if at least one corner of object's bounding box is visible
  */
 export function isObjectVisible(
   object: SceneObject,
@@ -62,6 +70,10 @@ export function isObjectVisible(
  * Calculate visibility percentage for an object from a camera
  * Returns 0-1 indicating how much of the object is visible
  * Following design principles: Pure function, reusable utility
+ * 
+ * @param object - Scene object to calculate visibility for
+ * @param camera - Camera object to calculate visibility from
+ * @returns Visibility percentage (0-1, currently binary: 1 if visible, 0 if not)
  */
 export function calculateVisibilityPercentage(
   object: SceneObject,

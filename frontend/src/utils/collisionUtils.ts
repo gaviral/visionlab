@@ -11,6 +11,10 @@ import { getObjectBoundingBox, type BoundingBox } from './boundingBoxUtils';
 /**
  * Check if two bounding boxes intersect (AABB collision detection)
  * Following design principles: Pure function, reusable utility
+ * 
+ * @param box1 - First bounding box
+ * @param box2 - Second bounding box
+ * @returns True if boxes intersect, false otherwise
  */
 export function checkAABBCollision(
   box1: BoundingBox,
@@ -29,6 +33,10 @@ export function checkAABBCollision(
 /**
  * Check if two objects collide
  * Following design principles: Pure function, reusable utility
+ * 
+ * @param obj1 - First scene object
+ * @param obj2 - Second scene object
+ * @returns True if objects collide, false otherwise
  */
 export function checkObjectCollision(
   obj1: SceneObject,
@@ -42,6 +50,10 @@ export function checkObjectCollision(
 /**
  * Find all objects that collide with a given object
  * Following design principles: Pure function, reusable utility
+ * 
+ * @param object - Object to check collisions for
+ * @param allObjects - Array of all objects in the scene
+ * @returns Array of objects that collide with the given object
  */
 export function findCollidingObjects(
   object: SceneObject,

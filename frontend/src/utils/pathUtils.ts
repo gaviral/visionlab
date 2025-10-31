@@ -8,6 +8,11 @@ import { lerpVector3, lerpRotation } from './transformUtils';
 /**
  * Interpolate position along path based on progress (0-1)
  * Returns current position and rotation for given progress
+ * 
+ * @param path - Path with waypoints to interpolate along
+ * @param progress - Progress value (0-1) along the path
+ * @returns Object containing interpolated position and rotation
+ * @throws Error if path has no waypoints
  */
 export const interpolatePath = (
   path: Path,
@@ -54,6 +59,9 @@ export const interpolatePath = (
 
 /**
  * Calculate total path length (approximate, using straight-line distances)
+ * 
+ * @param path - Path to calculate length for
+ * @returns Total path length in world units
  */
 export const calculatePathLength = (path: Path): number => {
   if (path.waypoints.length < 2) return 0;

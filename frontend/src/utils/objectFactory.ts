@@ -6,7 +6,7 @@
  * Pure functions for object creation - single source of truth
  */
 import { createId, createVector3 } from './transformUtils';
-import type { SceneObject, CameraObject, ObjectType, Vector3 } from '../types';
+import type { SceneObject, CameraObject, ObjectType, Vector3, RobotObject, GripperObject } from '../types';
 
 /**
  * Default object properties configuration
@@ -77,8 +77,38 @@ export function createSceneObject(
 }
 
 /**
+ * Create a gripper object attached to a robot
+ * Following design principles: Pure function, single responsibility
+ */
+function createGripperForRobot(
+  robotId: string,
+  robotPosition: Vector3,
+  endEffectorOffset: Vector3
+): GripperObject {
+  const gripperPosition = {
+    x: robotPosition.x + endEffectorOffset.x,
+    y: robotPosition.y + endEffectorOffset.y,
+    z: robotPosition.z + endEffectorOffset.z,
+  };
+
+  return {
+    id: createId(),
+    type: 'gripper',
+    position: gripperPosition,
+    rotation: createVector3(0, 0, 0),
+    scale: createVector3(1, 1, 1),
+    properties: {
+      parentRobotId: robotId,
+      gripperType: 'mechanical',
+    },
+  } as GripperObject;
+}
+
+/**
  * Create an object at a placement point (with Y offset)
  * Following design principles: Pure function, reusable utility
+ * 
+ * Special handling: Robots automatically get a gripper created with them
  */
 export function createObjectAtPoint(
   type: ObjectType,
@@ -89,7 +119,7 @@ export function createObjectAtPoint(
     parentRobotId?: string | null;
     properties?: Record<string, unknown>;
   } = {}
-): SceneObject {
+): SceneObject | { robot: RobotObject; gripper: GripperObject } {
   const yOffset = options.yOffset ?? 0.5;
   const position = createVector3(point.x, point.y + yOffset, point.z);
 
@@ -99,6 +129,24 @@ export function createObjectAtPoint(
       options.cameraType,
       options.parentRobotId ?? null
     );
+  }
+
+  if (type === 'robot') {
+    // Create robot with automatic gripper
+    const robot = createSceneObject(type, position, options.properties) as RobotObject;
+    const endEffectorOffset = (robot.properties.endEffectorOffset || { x: 0, y: 0.75, z: 0 }) as Vector3;
+    const gripper = createGripperForRobot(robot.id, robot.position, endEffectorOffset);
+    
+    // Set gripper ID on robot
+    robot.properties.gripperId = gripper.id;
+    
+    return { robot, gripper };
+  }
+
+  // Grippers cannot be placed directly - they're part of robots
+  if (type === 'gripper') {
+    // Return obstacle as fallback to prevent errors (gripper placement blocked in Ground.tsx)
+    return createSceneObject('obstacle', position, options.properties);
   }
 
   return createSceneObject(type, position, options.properties);
