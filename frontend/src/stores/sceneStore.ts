@@ -4,7 +4,7 @@
  * Following design principles: Single responsibility, clear interface
  */
 import { create } from 'zustand';
-import type { SceneState, SceneObject, ObjectType, Vector3 } from '../types';
+import type { SceneState, SceneObject, ObjectType } from '../types';
 
 interface SceneStore extends SceneState {
   // Actions

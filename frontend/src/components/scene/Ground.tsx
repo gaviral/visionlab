@@ -5,7 +5,7 @@
 import { useRef } from 'react';
 import { Mesh } from 'three';
 import { useSceneStore } from '../../stores/sceneStore';
-import { createId, createVector3, vector3ToArray } from '../../utils/transformUtils';
+import { createId, createVector3 } from '../../utils/transformUtils';
 import type { SceneObject } from '../../types';
 
 export function Ground() {

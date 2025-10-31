@@ -63,7 +63,7 @@ export function ObjectLibrary() {
       </div>
 
       <div className="space-y-2">
-        {OBJECT_TYPES.map(({ type, label, description, color, borderColor }) => {
+        {OBJECT_TYPES.map(({ type, label, description, color }) => {
           const isActive = placingType === type;
           return (
             <button
