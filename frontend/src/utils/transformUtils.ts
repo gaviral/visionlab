@@ -28,3 +28,42 @@ export const arrayToVector3 = (
   z: arr[2],
 });
 
+/**
+ * Linear interpolation between two Vector3 values
+ * Following design principles: Pure function, reusable utility
+ */
+export const lerpVector3 = (
+  start: Vector3,
+  end: Vector3,
+  t: number
+): Vector3 => ({
+  x: start.x + (end.x - start.x) * t,
+  y: start.y + (end.y - start.y) * t,
+  z: start.z + (end.z - start.z) * t,
+});
+
+/**
+ * Linear interpolation for rotation (handles angle wrapping)
+ * Following design principles: Pure function, reusable utility
+ */
+export const lerpRotation = (
+  start: Vector3,
+  end: Vector3,
+  t: number
+): Vector3 => ({
+  x: lerpAngle(start.x, end.x, t),
+  y: lerpAngle(start.y, end.y, t),
+  z: lerpAngle(start.z, end.z, t),
+});
+
+/**
+ * Linear interpolation for angles (handles wrapping)
+ * Following design principles: Pure function, reusable utility
+ */
+const lerpAngle = (start: number, end: number, t: number): number => {
+  let diff = end - start;
+  if (diff > Math.PI) diff -= 2 * Math.PI;
+  if (diff < -Math.PI) diff += 2 * Math.PI;
+  return start + diff * t;
+};
+
