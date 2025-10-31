@@ -5,7 +5,10 @@
 export * from './boundingBoxUtils';
 export * from './collisionUtils';
 export * from './objectConfigUtils';
+export * from './objectFactory';
+export * from './objectGeometryConfig';
 export * from './pathUtils';
 export * from './transformUtils';
 export * from './visionUtils';
+export * from './visualFeedbackUtils';
 

@@ -6,8 +6,7 @@ import { useRef } from 'react';
 import { Mesh } from 'three';
 import { ThreeEvent } from '@react-three/fiber';
 import { useSceneStore } from '../../stores/sceneStore';
-import { createId, createVector3 } from '../../utils/transformUtils';
-import type { SceneObject, CameraObject } from '../../types';
+import { createObjectAtPoint } from '../../utils/objectFactory';
 
 export function Ground() {
   const meshRef = useRef<Mesh>(null);
@@ -20,36 +19,8 @@ export function Ground() {
     event.stopPropagation();
     const { point } = event;
 
-    // Create object based on type
-    let newObject: SceneObject;
-    
-    if (placingType === 'camera') {
-      // Create camera with default eye-to-hand mode
-      newObject = {
-        id: createId(),
-        type: 'camera',
-        cameraType: 'eye-to-hand',
-        position: createVector3(point.x, point.y + 0.5, point.z),
-        rotation: createVector3(0, 0, 0),
-        scale: createVector3(1, 1, 1),
-        properties: {
-          fov: 60,
-          resolution: { width: 1920, height: 1080 },
-          parentRobotId: null,
-        },
-      } as CameraObject;
-    } else {
-      // Create generic object
-      newObject = {
-        id: createId(),
-        type: placingType,
-        position: createVector3(point.x, point.y + 0.5, point.z),
-        rotation: createVector3(0, 0, 0),
-        scale: createVector3(1, 1, 1),
-        properties: {},
-      };
-    }
-
+    // Create object using factory utility
+    const newObject = createObjectAtPoint(placingType, point);
     addObject(newObject);
   };
 
