@@ -2,7 +2,7 @@
  * ArchitecturePage - Comprehensive, beautiful architecture documentation
  * Following design principles: User-focused, professional polish, extreme modularity
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { ArchitectureNav } from './ArchitectureNav';
 import { ArchitectureSection } from './ArchitectureSection';
 import { ArchitectureCard } from './ArchitectureCard';
@@ -14,10 +14,12 @@ interface Section {
   content: string;
 }
 
+/* eslint-disable max-lines-per-function */
+// Exception: Documentation component with structured content - length is acceptable for content presentation
 export function ArchitecturePage() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
-  const sections: Section[] = [
+  const sections: Section[] = useMemo(() => [
     {
       id: 'overview',
       title: 'System Overview',
@@ -348,14 +350,14 @@ React Component Tree → JSX Elements → react-three-fiber converts to Three.js
 - Testability: Test logic separately
 - Reusability: Use across components`,
     },
-  ];
+  ], []);
 
   // Auto-select first section on mount
   useEffect(() => {
     if (!activeSection && sections.length > 0) {
       setActiveSection(sections[0].id);
     }
-  }, []);
+  }, [activeSection, sections, setActiveSection]);
 
   const currentSection = sections.find((s) => s.id === activeSection);
 

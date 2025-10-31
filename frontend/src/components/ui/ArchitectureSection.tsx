@@ -12,6 +12,8 @@ interface ArchitectureSectionProps {
   isActive: boolean;
 }
 
+/* eslint-disable max-lines-per-function */
+// Exception: Markdown parsing/rendering component - length is acceptable for rendering logic
 function MarkdownText({ text }: { text: string }) {
   const lines = text.split('\n');
   const elements: ReactNode[] = [];
