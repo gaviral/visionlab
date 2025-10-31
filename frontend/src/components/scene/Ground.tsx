@@ -7,6 +7,8 @@ import { Mesh } from 'three';
 import { ThreeEvent } from '@react-three/fiber';
 import { useSceneStore } from '../../stores/sceneStore';
 import { createObjectAtPoint } from '../../utils/objectFactory';
+import { calculateGroundVisualState } from '../../utils/groundVisualStateUtils';
+import type { SceneObject } from '../../types';
 
 export function Ground() {
   const meshRef = useRef<Mesh>(null);
@@ -20,14 +22,20 @@ export function Ground() {
     const { point } = event;
 
     // Create object using factory utility
-    const newObject = createObjectAtPoint(placingType, point);
-    addObject(newObject);
+    const result = createObjectAtPoint(placingType, point);
+    
+    // Robots automatically create grippers - handle both objects
+    if (placingType === 'robot' && 'robot' in result && 'gripper' in result) {
+      addObject(result.robot);
+      addObject(result.gripper);
+    } else if (placingType !== 'gripper') {
+      // Regular object (grippers cannot be placed directly)
+      addObject(result as SceneObject);
+    }
   };
 
-  // Ground is always visible, changes color when in placement mode
-  const isPlacing = placingType !== null;
-  const groundColor = isPlacing ? '#10b981' : '#4b5563'; // Green when placing, gray otherwise
-  const groundOpacity = isPlacing ? 0.6 : 0.4; // More visible when placing
+  // Ground visual state based on placement mode
+  const visualState = calculateGroundVisualState(placingType);
 
   return (
     <mesh
@@ -38,8 +46,8 @@ export function Ground() {
     >
       <planeGeometry args={[20, 20]} />
       <meshStandardMaterial
-        color={groundColor}
-        opacity={groundOpacity}
+        color={visualState.color}
+        opacity={visualState.opacity}
         transparent
       />
     </mesh>

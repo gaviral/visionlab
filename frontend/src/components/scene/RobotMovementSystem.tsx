@@ -10,7 +10,8 @@
 import { useFrame } from '@react-three/fiber';
 import { useSceneStore } from '../../stores/sceneStore';
 import { interpolatePath } from '../../utils/pathUtils';
-import type { RobotObject } from '../../types';
+import { calculateProgressDelta, calculateNextProgress } from '../../utils/pathProgressUtils';
+import { filterRobots } from '../../utils/objectQueryUtils';
 
 export function RobotMovementSystem() {
   const simulation = useSceneStore((state) => state.simulation);
@@ -35,33 +36,29 @@ export function RobotMovementSystem() {
     }
 
     // Find robot assigned to this path
-    const robot = objects.find(
-      (obj): obj is RobotObject =>
-        obj.type === 'robot' && obj.properties.pathId === path.id
+    const robots = filterRobots(objects);
+    const robot = robots.find(
+      (r) => r.properties.pathId === path.id
     );
 
     if (!robot) {
       return;
     }
 
-    // Calculate new progress based on delta time and speed
-    const pathSpeed = path.speed; // Units per second
-    const simulationSpeed = simulation.speed; // Speed multiplier
-    const pathLength = path.waypoints.length > 1 ? path.waypoints.length - 1 : 1;
-    const progressDelta = (delta * pathSpeed * simulationSpeed) / pathLength;
+    // Calculate progress delta
+    const progressDelta = calculateProgressDelta(
+      path,
+      delta,
+      simulation.speed
+    );
 
-    let newProgress = simulation.progress + progressDelta;
-
-    // Handle path completion
-    if (newProgress >= 1) {
-      if (path.loop) {
-        newProgress = newProgress % 1;
-      } else {
-        newProgress = 1;
-        // Stop simulation when non-looping path completes
-        stopSimulation();
-      }
-    }
+    // Calculate next progress with completion handling
+    const newProgress = calculateNextProgress(
+      simulation.progress,
+      progressDelta,
+      path,
+      () => stopSimulation()
+    );
 
     // Update simulation progress
     setSimulationProgress(newProgress);
@@ -74,7 +71,7 @@ export function RobotMovementSystem() {
         rotation,
       });
     } catch (error) {
-      console.error('Error interpolating path:', error);
+      // Silent fail - path interpolation errors are handled gracefully
     }
   });
 

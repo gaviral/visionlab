@@ -1,38 +1,54 @@
 /**
  * Zustand store for application state
  * Two-tiered: Application state here, transient state in useFrame
- * Following design principles: Single responsibility, clear interface
+ * Following design principles: Single responsibility, clear interface, domain separation
+ * 
+ * Uses slice pattern for modular organization:
+ * - SceneObjectsSlice: Object actions (selection, placement)
+ * - CameraSlice: Camera rendering mode actions
+ * - PathSlice: Robot path actions
+ * - SimulationSlice: Simulation control actions
+ * - VisionSlice: Vision validation actions
+ * - CollisionSlice: Collision detection actions
  */
 import { create } from 'zustand';
-import type { SceneState, SceneObject, ObjectType, Path } from '../types';
+import type { SceneState } from '../types';
+import { createSceneObjectsSlice, type SceneObjectsSlice } from './slices/sceneObjectsSlice';
+import { createCameraSlice, type CameraSlice } from './slices/cameraSlice';
+import { createPathSlice, type PathSlice } from './slices/pathSlice';
+import { createSimulationSlice, type SimulationSlice } from './slices/simulationSlice';
+import { createVisionSlice, type VisionSlice } from './slices/visionSlice';
+import { createCollisionSlice, type CollisionSlice } from './slices/collisionSlice';
 
-interface SceneStore extends SceneState {
-  // Actions
-  addObject: (object: SceneObject) => void;
-  removeObject: (id: string) => void;
-  selectObject: (id: string | null) => void;
-  updateObject: (id: string, updates: Partial<SceneObject>) => void;
-  setPlacingMode: (type: ObjectType | null) => void;
-  setCameraMode: (mode: 'perspective' | 'orthographic') => void;
-  setObjects: (objects: SceneObject[]) => void;
-  // Path actions
-  addPath: (path: Path) => void;
-  removePath: (id: string) => void;
-  updatePath: (id: string, updates: Partial<Path>) => void;
-  // Simulation actions
-  startSimulation: (pathId: string) => void;
-  pauseSimulation: () => void;
-  stopSimulation: () => void;
-  setSimulationProgress: (progress: number) => void;
-  setSimulationSpeed: (speed: number) => void;
-  // Visibility actions
-  setVisibility: (cameraId: string, visibleObjectIds: string[]) => void;
-  // Collision actions
-  setCollisions: (collidingObjectIds: string[]) => void;
-}
+/**
+ * Combined store interface
+ * Following design principles: Composition over inheritance, modular slices
+ * State properties come from SceneState, actions come from slices
+ */
+export interface SceneStore
+  extends SceneState,
+    SceneObjectsSlice,
+    CameraSlice,
+    PathSlice,
+    SimulationSlice,
+    VisionSlice,
+    CollisionSlice {}
 
+/**
+ * Zustand setter function type
+ * Following design principles: Type safety, reusable type
+ */
+export type StoreSetter = (
+  partial: Partial<SceneStore> | ((state: SceneStore) => Partial<SceneStore>),
+  replace?: boolean
+) => void;
+
+/**
+ * Create the scene store by combining all domain slices
+ * Following design principles: Modular composition, single source of truth
+ */
 export const useSceneStore = create<SceneStore>((set) => ({
-  // Initial state
+  // Initial state (from SceneState)
   objects: [],
   selectedObjectId: null,
   cameraMode: 'perspective',
@@ -48,143 +64,12 @@ export const useSceneStore = create<SceneStore>((set) => ({
   visibility: {},
   collisions: [],
 
-  // Actions
-  addObject: (object) => {
-    return set((state) => {
-      const newObjects = [...state.objects, object];
-      return {
-        objects: newObjects,
-        selectedObjectId: object.id,
-        isPlacing: false,
-        placingType: null,
-      };
-    });
-  },
-
-  removeObject: (id) => {
-    return set((state) => {
-      const newObjects = state.objects.filter((obj) => obj.id !== id);
-      return {
-        objects: newObjects,
-        selectedObjectId:
-          state.selectedObjectId === id ? null : state.selectedObjectId,
-      };
-    });
-  },
-
-  selectObject: (id) => {
-    return set(() => ({
-      selectedObjectId: id,
-      isPlacing: false,
-      placingType: null,
-    }));
-  },
-
-  updateObject: (id, updates) => {
-    return set((state) => {
-      const newObjects = state.objects.map((obj) =>
-        obj.id === id ? { ...obj, ...updates } : obj
-      );
-      return {
-        objects: newObjects,
-      };
-    });
-  },
-
-  setPlacingMode: (type) => {
-    return set(() => ({
-      placingType: type,
-      isPlacing: type !== null,
-      selectedObjectId: null,
-    }));
-  },
-
-  setCameraMode: (mode) => set(() => ({ cameraMode: mode })),
-
-  setObjects: (objects) =>
-    set(() => ({
-      objects,
-      selectedObjectId: null,
-      isPlacing: false,
-      placingType: null,
-    })),
-
-  // Path actions
-  addPath: (path) =>
-    set((state) => ({
-      paths: [...state.paths, path],
-    })),
-
-  removePath: (id) =>
-    set((state) => ({
-      paths: state.paths.filter((path) => path.id !== id),
-    })),
-
-  updatePath: (id, updates) =>
-    set((state) => ({
-      paths: state.paths.map((path) =>
-        path.id === id ? { ...path, ...updates } : path
-      ),
-    })),
-
-  // Simulation actions
-  startSimulation: (pathId) =>
-    set(() => ({
-      simulation: {
-        state: 'playing',
-        progress: 0,
-        currentPathId: pathId,
-        speed: 1,
-      },
-    })),
-
-  pauseSimulation: () =>
-    set((state) => ({
-      simulation: {
-        ...state.simulation,
-        state: 'paused',
-      },
-    })),
-
-  stopSimulation: () =>
-    set(() => ({
-      simulation: {
-        state: 'idle',
-        progress: 0,
-        currentPathId: null,
-        speed: 1,
-      },
-    })),
-
-  setSimulationProgress: (progress) =>
-    set((state) => ({
-      simulation: {
-        ...state.simulation,
-        progress: Math.max(0, Math.min(1, progress)),
-      },
-    })),
-
-  setSimulationSpeed: (speed) =>
-    set((state) => ({
-      simulation: {
-        ...state.simulation,
-        speed: Math.max(0.1, Math.min(5, speed)),
-      },
-    })),
-
-  // Visibility actions
-  setVisibility: (cameraId, visibleObjectIds) =>
-    set((state) => ({
-      visibility: {
-        ...state.visibility,
-        [cameraId]: visibleObjectIds,
-      },
-    })),
-
-  // Collision actions
-  setCollisions: (collidingObjectIds) =>
-    set(() => ({
-      collisions: collidingObjectIds,
-    })),
+  // Actions from slices
+  ...createSceneObjectsSlice(set),
+  ...createCameraSlice(set),
+  ...createPathSlice(set),
+  ...createSimulationSlice(set),
+  ...createVisionSlice(set),
+  ...createCollisionSlice(set),
 }));
 

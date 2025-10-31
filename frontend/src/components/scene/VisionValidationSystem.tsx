@@ -11,7 +11,7 @@
 import { useFrame } from '@react-three/fiber';
 import { useSceneStore } from '../../stores/sceneStore';
 import { isObjectVisible } from '../../utils/visionUtils';
-import type { CameraObject } from '../../types';
+import { filterCameras, filterObjectsVisibleToCameras } from '../../utils/objectQueryUtils';
 
 export function VisionValidationSystem() {
   const objects = useSceneStore((state) => state.objects);
@@ -19,16 +19,12 @@ export function VisionValidationSystem() {
 
   useFrame(() => {
     // Find all cameras
-    const cameras = objects.filter(
-      (obj): obj is CameraObject => obj.type === 'camera'
-    );
+    const cameras = filterCameras(objects);
 
     // Calculate visibility for each camera
     cameras.forEach((camera) => {
-      // Find all non-camera objects (cameras don't see other cameras)
-      const objectsToCheck = objects.filter(
-        (obj) => obj.type !== 'camera' && obj.id !== camera.id
-      );
+      // Find all objects visible to cameras
+      const objectsToCheck = filterObjectsVisibleToCameras(objects, camera.id);
 
       // Calculate which objects are visible from this camera
       const visibleObjectIds = objectsToCheck

@@ -10,17 +10,17 @@
  */
 import { useFrame } from '@react-three/fiber';
 import { useSceneStore } from '../../stores/sceneStore';
-import type { CameraObject, RobotObject, GripperObject } from '../../types';
+import { filterCameras, filterRobots } from '../../utils/objectQueryUtils';
+import { calculateEndEffectorPosition } from '../../utils/endEffectorUtils';
 
 export function CameraSystem() {
   const objects = useSceneStore((state) => state.objects);
   const updateObject = useSceneStore((state) => state.updateObject);
 
   useFrame(() => {
-    // Find all cameras
-    const cameras = objects.filter(
-      (obj): obj is CameraObject => obj.type === 'camera'
-    );
+    // Find all cameras and robots
+    const cameras = filterCameras(objects);
+    const robots = filterRobots(objects);
 
     cameras.forEach((camera) => {
       if (camera.cameraType === 'eye-in-hand') {
@@ -28,43 +28,11 @@ export function CameraSystem() {
         const parentRobotId = camera.properties.parentRobotId;
         if (!parentRobotId) return;
 
-        const robot = objects.find(
-          (obj): obj is RobotObject =>
-            obj.type === 'robot' && obj.id === parentRobotId
-        );
-
+        const robot = robots.find((r) => r.id === parentRobotId);
         if (!robot) return;
 
-        // Get gripper position if attached
-        let endEffectorPosition = robot.position;
-        const gripperId = robot.properties.gripperId;
-        
-        if (gripperId) {
-          const gripper = objects.find(
-            (obj): obj is GripperObject =>
-              obj.type === 'gripper' && obj.id === gripperId
-          );
-          if (gripper) {
-            // End effector is at gripper position
-            endEffectorPosition = gripper.position;
-          } else {
-            // Use robot's end effector offset if no gripper
-            const offset = robot.properties.endEffectorOffset || { x: 0, y: 0, z: 0 };
-            endEffectorPosition = {
-              x: robot.position.x + offset.x,
-              y: robot.position.y + offset.y,
-              z: robot.position.z + offset.z,
-            };
-          }
-        } else {
-          // Use robot's end effector offset
-          const offset = robot.properties.endEffectorOffset || { x: 0, y: 0.75, z: 0 };
-          endEffectorPosition = {
-            x: robot.position.x + offset.x,
-            y: robot.position.y + offset.y,
-            z: robot.position.z + offset.z,
-          };
-        }
+        // Calculate end effector position
+        const endEffectorPosition = calculateEndEffectorPosition(robot);
 
         // Update camera position to follow end effector
         // Camera rotation follows robot rotation

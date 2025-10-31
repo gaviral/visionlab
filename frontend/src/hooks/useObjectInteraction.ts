@@ -15,7 +15,7 @@ import type { SceneObject } from '../types';
  */
 export interface ObjectInteractionHandlers {
   handleClick: (event: ThreeEvent<MouseEvent>) => void;
-  handleTransformChange: (mesh: THREE.Mesh) => void;
+  handleTransformChange: (object: THREE.Object3D) => void;
 }
 
 /**
@@ -33,10 +33,11 @@ export function useObjectInteraction(
     selectObject(object.id);
   };
 
-  const handleTransformChange = (mesh: THREE.Mesh) => {
-    const position = mesh.position;
-    const rotation = mesh.rotation;
-    const scale = mesh.scale;
+  const handleTransformChange = (obj: THREE.Object3D) => {
+    // Extract transform from any Object3D (Mesh, Group, etc.)
+    const position = obj.position;
+    const rotation = obj.rotation;
+    const scale = obj.scale;
 
     updateObject(object.id, {
       position: { x: position.x, y: position.y, z: position.z },

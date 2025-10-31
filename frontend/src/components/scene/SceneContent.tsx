@@ -9,26 +9,28 @@ import {
   CameraFrustum,
   VisionValidationSystem,
   CollisionDetector,
+  GripperSystem,
+  PathVisualization,
 } from './index';
 import { ObjectRenderer } from '../objects';
 import { useSceneStore } from '../../stores/sceneStore';
-import type { CameraObject } from '../../types';
+import { filterCameras } from '../../utils/objectQueryUtils';
 
 export function SceneContent() {
   const objects = useSceneStore((state) => state.objects);
 
   // Separate cameras for frustum rendering
-  const cameras = objects.filter(
-    (obj): obj is CameraObject => obj.type === 'camera'
-  );
+  const cameras = filterCameras(objects);
 
   return (
     <>
       <Ground />
       <RobotMovementSystem />
       <CameraSystem />
+      <GripperSystem />
       <VisionValidationSystem />
       <CollisionDetector />
+      <PathVisualization />
       {objects.map((obj) => (
         <ObjectRenderer key={obj.id} object={obj} />
       ))}
