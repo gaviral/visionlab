@@ -14,10 +14,14 @@ export function Ground() {
   const placingType = useSceneStore((state) => state.placingType);
 
   const handleClick = (event: any) => {
-    if (!placingType) return;
+    if (!placingType) {
+      console.log('[Ground] Click ignored - no placing type active');
+      return;
+    }
 
     event.stopPropagation();
     const { point } = event;
+    console.log('[Ground] Click detected at:', { x: point.x, y: point.y, z: point.z }, 'placingType:', placingType);
 
     // Create object based on type
     let newObject: SceneObject;
@@ -37,6 +41,7 @@ export function Ground() {
           parentRobotId: null,
         },
       } as CameraObject;
+      console.log('[Ground] Created camera object:', newObject);
     } else {
       // Create generic object
       newObject = {
@@ -47,8 +52,10 @@ export function Ground() {
         scale: createVector3(1, 1, 1),
         properties: {},
       };
+      console.log('[Ground] Created object:', newObject);
     }
 
+    console.log('[Ground] Adding object to store...');
     addObject(newObject);
   };
 

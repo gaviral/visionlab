@@ -4,8 +4,7 @@
  * Following design principles: Single responsibility, clear interface
  */
 import { create } from 'zustand';
-import type { SceneState, SceneObject, ObjectType, Path, SimulationState } from '../types';
-import { createId } from '../utils/transformUtils';
+import type { SceneState, SceneObject, ObjectType, Path } from '../types';
 
 interface SceneStore extends SceneState {
   // Actions
@@ -44,41 +43,71 @@ export const useSceneStore = create<SceneStore>((set) => ({
   },
 
   // Actions
-  addObject: (object) =>
-    set((state) => ({
-      objects: [...state.objects, object],
-      selectedObjectId: object.id,
-      isPlacing: false,
-      placingType: null,
-    })),
+  addObject: (object) => {
+    console.log('[Store] addObject called:', object);
+    return set((state) => {
+      const newObjects = [...state.objects, object];
+      console.log('[Store] Objects updated:', { 
+        previousCount: state.objects.length, 
+        newCount: newObjects.length,
+        objectId: object.id,
+        objectType: object.type
+      });
+      return {
+        objects: newObjects,
+        selectedObjectId: object.id,
+        isPlacing: false,
+        placingType: null,
+      };
+    });
+  },
 
-  removeObject: (id) =>
-    set((state) => ({
-      objects: state.objects.filter((obj) => obj.id !== id),
-      selectedObjectId:
-        state.selectedObjectId === id ? null : state.selectedObjectId,
-    })),
+  removeObject: (id) => {
+    console.log('[Store] removeObject called:', id);
+    return set((state) => {
+      const newObjects = state.objects.filter((obj) => obj.id !== id);
+      console.log('[Store] Object removed:', { 
+        id, 
+        previousCount: state.objects.length, 
+        newCount: newObjects.length 
+      });
+      return {
+        objects: newObjects,
+        selectedObjectId:
+          state.selectedObjectId === id ? null : state.selectedObjectId,
+      };
+    });
+  },
 
-  selectObject: (id) =>
-    set(() => ({
+  selectObject: (id) => {
+    console.log('[Store] selectObject called:', id);
+    return set(() => ({
       selectedObjectId: id,
       isPlacing: false,
       placingType: null,
-    })),
+    }));
+  },
 
-  updateObject: (id, updates) =>
-    set((state) => ({
-      objects: state.objects.map((obj) =>
+  updateObject: (id, updates) => {
+    console.log('[Store] updateObject called:', { id, updates });
+    return set((state) => {
+      const newObjects = state.objects.map((obj) =>
         obj.id === id ? { ...obj, ...updates } : obj
-      ),
-    })),
+      );
+      return {
+        objects: newObjects,
+      };
+    });
+  },
 
-  setPlacingMode: (type) =>
-    set(() => ({
+  setPlacingMode: (type) => {
+    console.log('[Store] setPlacingMode called:', { type, isPlacing: type !== null });
+    return set(() => ({
       placingType: type,
       isPlacing: type !== null,
       selectedObjectId: null,
-    })),
+    }));
+  },
 
   setCameraMode: (mode) => set(() => ({ cameraMode: mode })),
 

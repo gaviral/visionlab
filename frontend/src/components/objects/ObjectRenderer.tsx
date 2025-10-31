@@ -23,6 +23,7 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
 
   const handleClick = (event: any) => {
     event.stopPropagation();
+    console.log('[ObjectRenderer] Object clicked:', { id: object.id, type: object.type });
     selectObject(object.id);
   };
 
@@ -33,11 +34,13 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
     const rotation = meshRef.current.rotation;
     const scale = meshRef.current.scale;
 
-    updateObject(object.id, {
+    const updates = {
       position: { x: position.x, y: position.y, z: position.z },
       rotation: { x: rotation.x, y: rotation.y, z: rotation.z },
       scale: { x: scale.x, y: scale.y, z: scale.z },
-    });
+    };
+    console.log('[ObjectRenderer] Transform changed:', { id: object.id, updates });
+    updateObject(object.id, updates);
   };
 
   // Render different geometries based on object type

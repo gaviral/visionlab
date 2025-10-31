@@ -55,7 +55,13 @@ export function ObjectLibrary() {
   const objects = useSceneStore((state) => state.objects);
 
   const handleObjectClick = (type: ObjectType) => {
-    setPlacingMode(type === placingType ? null : type);
+    const newMode = type === placingType ? null : type;
+    console.log('[ObjectLibrary] Setting placing mode:', { 
+      from: placingType, 
+      to: newMode,
+      type 
+    });
+    setPlacingMode(newMode);
   };
 
   return (

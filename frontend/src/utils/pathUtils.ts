@@ -2,7 +2,7 @@
  * Path interpolation utilities
  * Following design principles: Single responsibility, DRY, pure functions
  */
-import type { Path, PathWaypoint, Vector3 } from '../types';
+import type { Path, Vector3 } from '../types';
 import { lerpVector3, lerpRotation } from './transformUtils';
 
 /**

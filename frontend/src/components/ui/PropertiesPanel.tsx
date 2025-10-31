@@ -66,6 +66,7 @@ export function PropertiesPanel() {
     bin: { bg: 'bg-red-600/10', border: 'border-red-600/30', text: 'text-red-400' },
     obstacle: { bg: 'bg-orange-600/10', border: 'border-orange-600/30', text: 'text-orange-400' },
     robot: { bg: 'bg-purple-600/10', border: 'border-purple-600/30', text: 'text-purple-400' },
+    gripper: { bg: 'bg-pink-600/10', border: 'border-pink-600/30', text: 'text-pink-400' },
   }[selectedObject.type];
 
   return (
