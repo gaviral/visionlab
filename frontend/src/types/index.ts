@@ -97,5 +97,6 @@ export interface SceneState {
   paths: Path[];
   simulation: SimulationData;
   visibility: Record<string, string[]>; // cameraId -> array of visible object IDs
+  collisions: string[]; // array of object IDs that are colliding
 }
 

@@ -17,6 +17,7 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
   const meshRef = useRef<Mesh>(null);
   const selectedObjectId = useSceneStore((state) => state.selectedObjectId);
   const visibility = useSceneStore((state) => state.visibility);
+  const collisions = useSceneStore((state) => state.collisions);
   const selectObject = useSceneStore((state) => state.selectObject);
   const updateObject = useSceneStore((state) => state.updateObject);
 
@@ -26,6 +27,9 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
   const isVisible = Object.values(visibility).some((visibleIds) =>
     visibleIds.includes(object.id)
   );
+
+  // Check if object is colliding
+  const isColliding = collisions.includes(object.id);
 
   const handleClick = (event: any) => {
     event.stopPropagation();
@@ -49,11 +53,44 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
     updateObject(object.id, updates);
   };
 
+  // Get base color for object type
+  const getBaseColor = (type: string): string => {
+    switch (type) {
+      case 'camera':
+        return '#3b82f6';
+      case 'bin':
+        return '#ef4444';
+      case 'obstacle':
+        return '#f59e0b';
+      case 'robot':
+        return '#8b5cf6';
+      case 'gripper':
+        return '#ec4899';
+      default:
+        return '#6b7280';
+    }
+  };
+
   // Render different geometries based on object type
-  // Apply visibility highlighting (green tint for visible objects)
+  // Apply visual feedback: green for visible, red for colliding
+  // Priority: collision > visibility > base color
   const renderGeometry = () => {
-    const baseColor = isVisible ? '#10b981' : getBaseColor(object.type);
-    const opacity = isVisible ? 0.9 : 1.0;
+    let baseColor: string;
+    let opacity = 1.0;
+
+    if (isColliding) {
+      // Collision takes priority - red highlight
+      baseColor = '#ef4444';
+      opacity = 1.0;
+    } else if (isVisible) {
+      // Visibility - green highlight
+      baseColor = '#10b981';
+      opacity = 0.9;
+    } else {
+      // Base color
+      baseColor = getBaseColor(object.type);
+      opacity = 1.0;
+    }
 
     switch (object.type) {
       case 'camera':
@@ -101,24 +138,6 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
     }
   };
 
-  // Get base color for object type
-  const getBaseColor = (type: string): string => {
-    switch (type) {
-      case 'camera':
-        return '#3b82f6';
-      case 'bin':
-        return '#ef4444';
-      case 'obstacle':
-        return '#f59e0b';
-      case 'robot':
-        return '#8b5cf6';
-      case 'gripper':
-        return '#ec4899';
-      default:
-        return '#6b7280';
-    }
-  };
-
   return (
     <>
       <mesh
@@ -141,4 +160,3 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
     </>
   );
 }
-

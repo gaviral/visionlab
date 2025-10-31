@@ -27,6 +27,8 @@ interface SceneStore extends SceneState {
   setSimulationSpeed: (speed: number) => void;
   // Visibility actions
   setVisibility: (cameraId: string, visibleObjectIds: string[]) => void;
+  // Collision actions
+  setCollisions: (collidingObjectIds: string[]) => void;
 }
 
 export const useSceneStore = create<SceneStore>((set) => ({
@@ -44,6 +46,7 @@ export const useSceneStore = create<SceneStore>((set) => ({
     speed: 1,
   },
   visibility: {},
+  collisions: [],
 
   // Actions
   addObject: (object) => {
@@ -192,6 +195,12 @@ export const useSceneStore = create<SceneStore>((set) => ({
         ...state.visibility,
         [cameraId]: visibleObjectIds,
       },
+    })),
+
+  // Collision actions
+  setCollisions: (collidingObjectIds) =>
+    set(() => ({
+      collisions: collidingObjectIds,
     })),
 }));
 
