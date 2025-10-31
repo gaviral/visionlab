@@ -7,7 +7,6 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { SceneContent } from './components/scene/SceneContent';
 import { Layout } from './components/ui/Layout';
-import { Toolbar } from './components/ui/Toolbar';
 import { ArchitecturePage } from './components/ui/ArchitecturePage';
 import { Button } from './components/ui/Button';
 import './index.css';
@@ -34,16 +33,7 @@ function App() {
   }
 
   return (
-    <Layout>
-      <Toolbar />
-      <Button
-        variant="secondary"
-        size="sm"
-        onClick={() => setViewMode('architecture')}
-        className="absolute top-4 right-4 z-10"
-      >
-        View Architecture
-      </Button>
+    <Layout onViewArchitecture={() => setViewMode('architecture')}>
       <Canvas
         camera={{ position: [10, 10, 10], fov: 50 }}
         style={{ width: '100%', height: '100%' }}

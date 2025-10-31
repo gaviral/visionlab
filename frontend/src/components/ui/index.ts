@@ -9,6 +9,7 @@ export { Layout } from './Layout';
 export { ObjectLibrary } from './ObjectLibrary';
 export { PathPanel } from './PathPanel';
 export { PropertiesPanel } from './PropertiesPanel';
+export { SceneHierarchy } from './SceneHierarchy';
 export { SimulationPanel } from './SimulationPanel';
 export { TabbedPanel } from './TabbedPanel';
 export { Toolbar } from './Toolbar';
