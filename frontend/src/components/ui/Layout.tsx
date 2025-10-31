@@ -16,9 +16,11 @@ export function Layout({ children }: LayoutProps) {
       {/* Header */}
       <header className="h-14 bg-gray-800 border-b border-gray-700 flex items-center px-6 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded bg-blue-600 flex items-center justify-center">
-            <span className="text-white font-semibold text-xs">VL</span>
-          </div>
+          <img 
+            src="/favicon.svg" 
+            alt="Vision Lab" 
+            className="w-7 h-7 rounded"
+          />
           <h1 className="text-base font-semibold text-white">
             Vision Lab
           </h1>
