@@ -4,6 +4,8 @@
  */
 import { Ground } from './Ground';
 import { ObjectRenderer } from '../objects/ObjectRenderer';
+import { RobotMovementSystem } from './RobotMovementSystem';
+import { CameraSystem } from './CameraSystem';
 import { useSceneStore } from '../../stores/sceneStore';
 
 export function SceneContent() {
@@ -12,6 +14,8 @@ export function SceneContent() {
   return (
     <>
       <Ground />
+      <RobotMovementSystem />
+      <CameraSystem />
       {objects.map((obj) => (
         <ObjectRenderer key={obj.id} object={obj} />
       ))}
