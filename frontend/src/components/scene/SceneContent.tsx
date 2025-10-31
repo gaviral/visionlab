@@ -7,6 +7,7 @@ import { ObjectRenderer } from '../objects/ObjectRenderer';
 import { RobotMovementSystem } from './RobotMovementSystem';
 import { CameraSystem } from './CameraSystem';
 import { CameraFrustum } from './CameraFrustum';
+import { VisionValidationSystem } from './VisionValidationSystem';
 import { useSceneStore } from '../../stores/sceneStore';
 import { useEffect } from 'react';
 import type { CameraObject } from '../../types';
@@ -31,6 +32,7 @@ export function SceneContent() {
       <Ground />
       <RobotMovementSystem />
       <CameraSystem />
+      <VisionValidationSystem />
       {objects.map((obj) => (
         <ObjectRenderer key={obj.id} object={obj} />
       ))}

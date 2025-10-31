@@ -96,5 +96,6 @@ export interface SceneState {
   placingType: ObjectType | null;
   paths: Path[];
   simulation: SimulationData;
+  visibility: Record<string, string[]>; // cameraId -> array of visible object IDs
 }
 

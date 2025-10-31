@@ -25,6 +25,8 @@ interface SceneStore extends SceneState {
   stopSimulation: () => void;
   setSimulationProgress: (progress: number) => void;
   setSimulationSpeed: (speed: number) => void;
+  // Visibility actions
+  setVisibility: (cameraId: string, visibleObjectIds: string[]) => void;
 }
 
 export const useSceneStore = create<SceneStore>((set) => ({
@@ -41,6 +43,7 @@ export const useSceneStore = create<SceneStore>((set) => ({
     currentPathId: null,
     speed: 1,
   },
+  visibility: {},
 
   // Actions
   addObject: (object) => {
@@ -179,6 +182,15 @@ export const useSceneStore = create<SceneStore>((set) => ({
       simulation: {
         ...state.simulation,
         speed: Math.max(0.1, Math.min(5, speed)),
+      },
+    })),
+
+  // Visibility actions
+  setVisibility: (cameraId, visibleObjectIds) =>
+    set((state) => ({
+      visibility: {
+        ...state.visibility,
+        [cameraId]: visibleObjectIds,
       },
     })),
 }));

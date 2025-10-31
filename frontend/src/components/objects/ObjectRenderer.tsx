@@ -16,10 +16,16 @@ interface ObjectRendererProps {
 export function ObjectRenderer({ object }: ObjectRendererProps) {
   const meshRef = useRef<Mesh>(null);
   const selectedObjectId = useSceneStore((state) => state.selectedObjectId);
+  const visibility = useSceneStore((state) => state.visibility);
   const selectObject = useSceneStore((state) => state.selectObject);
   const updateObject = useSceneStore((state) => state.updateObject);
 
   const isSelected = selectedObjectId === object.id;
+
+  // Check if object is visible from any camera
+  const isVisible = Object.values(visibility).some((visibleIds) =>
+    visibleIds.includes(object.id)
+  );
 
   const handleClick = (event: any) => {
     event.stopPropagation();
@@ -44,50 +50,72 @@ export function ObjectRenderer({ object }: ObjectRendererProps) {
   };
 
   // Render different geometries based on object type
+  // Apply visibility highlighting (green tint for visible objects)
   const renderGeometry = () => {
+    const baseColor = isVisible ? '#10b981' : getBaseColor(object.type);
+    const opacity = isVisible ? 0.9 : 1.0;
+
     switch (object.type) {
       case 'camera':
         return (
           <>
             <boxGeometry args={[0.5, 0.5, 0.5]} />
-            <meshStandardMaterial color="#3b82f6" />
+            <meshStandardMaterial color={baseColor} opacity={opacity} transparent />
           </>
         );
       case 'bin':
         return (
           <>
             <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color="#ef4444" wireframe />
+            <meshStandardMaterial color={baseColor} opacity={opacity} transparent wireframe />
           </>
         );
       case 'obstacle':
         return (
           <>
             <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color="#f59e0b" />
+            <meshStandardMaterial color={baseColor} opacity={opacity} transparent />
           </>
         );
       case 'robot':
         return (
           <>
             <boxGeometry args={[0.8, 1.5, 0.8]} />
-            <meshStandardMaterial color="#8b5cf6" />
+            <meshStandardMaterial color={baseColor} opacity={opacity} transparent />
           </>
         );
       case 'gripper':
         return (
           <>
             <boxGeometry args={[0.3, 0.3, 0.6]} />
-            <meshStandardMaterial color="#ec4899" />
+            <meshStandardMaterial color={baseColor} opacity={opacity} transparent />
           </>
         );
       default:
         return (
           <>
             <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color="#6b7280" />
+            <meshStandardMaterial color={baseColor} opacity={opacity} transparent />
           </>
         );
+    }
+  };
+
+  // Get base color for object type
+  const getBaseColor = (type: string): string => {
+    switch (type) {
+      case 'camera':
+        return '#3b82f6';
+      case 'bin':
+        return '#ef4444';
+      case 'obstacle':
+        return '#f59e0b';
+      case 'robot':
+        return '#8b5cf6';
+      case 'gripper':
+        return '#ec4899';
+      default:
+        return '#6b7280';
     }
   };
 
