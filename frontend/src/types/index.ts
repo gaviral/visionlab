@@ -98,5 +98,10 @@ export interface SceneState {
   simulation: SimulationData;
   visibility: Record<string, string[]>; // cameraId -> array of visible object IDs
   collisions: string[]; // array of object IDs that are colliding
+  viewSettings: {
+    showFrustums: boolean; // Toggle camera frustum visualization
+    showCollisions: boolean; // Toggle collision visualization
+    showPaths: boolean; // Toggle path visualization
+  };
 }
 

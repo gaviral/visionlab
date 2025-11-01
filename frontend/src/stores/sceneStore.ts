@@ -19,6 +19,7 @@ import { createPathSlice, type PathSlice } from './slices/pathSlice';
 import { createSimulationSlice, type SimulationSlice } from './slices/simulationSlice';
 import { createVisionSlice, type VisionSlice } from './slices/visionSlice';
 import { createCollisionSlice, type CollisionSlice } from './slices/collisionSlice';
+import { createViewSlice, type ViewSlice } from './slices/viewSlice';
 
 /**
  * Combined store interface
@@ -32,7 +33,8 @@ export interface SceneStore
     PathSlice,
     SimulationSlice,
     VisionSlice,
-    CollisionSlice {}
+    CollisionSlice,
+    ViewSlice {}
 
 /**
  * Zustand setter function type
@@ -63,6 +65,11 @@ export const useSceneStore = create<SceneStore>((set) => ({
   },
   visibility: {},
   collisions: [],
+  viewSettings: {
+    showFrustums: true, // Show frustums by default
+    showCollisions: true, // Show collision visualization by default
+    showPaths: true, // Show paths by default
+  },
 
   // Actions from slices
   ...createSceneObjectsSlice(set),
@@ -71,5 +78,6 @@ export const useSceneStore = create<SceneStore>((set) => ({
   ...createSimulationSlice(set),
   ...createVisionSlice(set),
   ...createCollisionSlice(set),
+  ...createViewSlice(set),
 }));
 

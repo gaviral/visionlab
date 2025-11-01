@@ -7,6 +7,10 @@
  *
  * Design Decision: Separate component for each camera (composition over coupling)
  * Uses Three.js CameraHelper internally for accurate frustum calculation
+ * 
+ * Color coding:
+ * - Eye-to-hand cameras: Cyan (stationary, environment view)
+ * - Eye-in-hand cameras: Yellow (moving with robot, EOAT view)
  */
 import { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
@@ -15,6 +19,16 @@ import type { CameraObject } from '../../types';
 
 interface CameraFrustumProps {
   camera: CameraObject;
+}
+
+/**
+ * Get frustum color based on camera type
+ * Following design principles: Single responsibility, visual clarity
+ */
+function getFrustumColor(cameraMode: string): THREE.Color {
+  return cameraMode === 'eye-in-hand'
+    ? new THREE.Color(0xffff00) // Yellow for eye-in-hand (moves with robot)
+    : new THREE.Color(0x00ffff); // Cyan for eye-to-hand (stationary)
 }
 
 export function CameraFrustum({ camera }: CameraFrustumProps) {
@@ -31,6 +45,7 @@ export function CameraFrustum({ camera }: CameraFrustumProps) {
     const fov = camera.properties.fov || 60;
     const resolution = camera.properties.resolution || { width: 1920, height: 1080 };
     const aspect = resolution.width / resolution.height;
+    const cameraMode = camera.cameraType || 'eye-to-hand';
 
     // Update camera parameters
     threeCamera.fov = fov;
@@ -42,6 +57,12 @@ export function CameraFrustum({ camera }: CameraFrustumProps) {
     // Create helper if it doesn't exist
     if (!helperRef.current) {
       helperRef.current = new THREE.CameraHelper(threeCamera);
+      
+      // Set frustum color based on camera mode
+      const frustumColor = getFrustumColor(cameraMode);
+      if (helperRef.current.material) {
+        (helperRef.current.material as THREE.LineBasicMaterial).color = frustumColor;
+      }
     }
 
     // Update helper when camera properties change
@@ -54,7 +75,7 @@ export function CameraFrustum({ camera }: CameraFrustumProps) {
         helperRef.current = null;
       }
     };
-  }, [camera.properties.fov, camera.properties.resolution]);
+  }, [camera.properties.fov, camera.properties.resolution, camera.cameraType]);
 
   // Update camera position and rotation every frame
   useFrame(() => {

@@ -11,6 +11,7 @@ import { PathPanel } from './PathPanel';
 import { SceneHierarchy } from './SceneHierarchy';
 import { SimulationPanel } from './SimulationPanel';
 import { TabbedPanel } from './TabbedPanel';
+import { ViewPanel } from './ViewPanel';
 import { Button } from './Button';
 import { useSceneStore } from '../../stores/sceneStore';
 import { downloadScene, loadSceneFromFile } from '../../utils/configUtils';
@@ -129,7 +130,7 @@ export function Layout({ children, onViewArchitecture }: LayoutProps) {
         {/* 3D Viewport */}
         <main className="flex-1 relative overflow-hidden">{children}</main>
 
-        {/* Right Sidebar - Inspector (Properties/Paths/Simulation) */}
+        {/* Right Sidebar - Inspector (Properties/Paths/Simulation/View) */}
         <aside className="w-72 bg-gray-800 border-l border-gray-700 shadow-xl flex-shrink-0">
           <TabbedPanel
             tabs={[
@@ -150,6 +151,12 @@ export function Layout({ children, onViewArchitecture }: LayoutProps) {
                 label: 'Simulation',
                 icon: '▶️',
                 content: <SimulationPanel />,
+              },
+              {
+                id: 'view',
+                label: 'View',
+                icon: '👁️',
+                content: <ViewPanel />,
               },
             ]}
             defaultTab="properties"

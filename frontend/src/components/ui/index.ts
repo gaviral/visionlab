@@ -13,4 +13,5 @@ export { SceneHierarchy } from './SceneHierarchy';
 export { SimulationPanel } from './SimulationPanel';
 export { TabbedPanel } from './TabbedPanel';
 export { Toolbar } from './Toolbar';
+export { ViewPanel } from './ViewPanel';
 
