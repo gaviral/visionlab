@@ -106,23 +106,16 @@ export function Layout({ children, onViewArchitecture }: LayoutProps) {
 
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar - Hierarchy + Object Library */}
-        <aside className="w-72 bg-gray-800 border-r border-gray-700 shadow-xl flex-shrink-0">
-          <TabbedPanel
-            tabs={[
-              {
-                id: 'hierarchy',
-                label: 'Scene',
-                content: <SceneHierarchy />,
-              },
-              {
-                id: 'library',
-                label: 'Objects',
-                content: <ObjectLibrary />,
-              },
-            ]}
-            defaultTab="hierarchy"
-          />
+        {/* Left Sidebar - Scene Hierarchy (top) + Object Library (bottom) Stacked */}
+        <aside className="w-72 bg-gray-800 border-r border-gray-700 shadow-xl flex-shrink-0 flex flex-col">
+          {/* Scene Hierarchy - Top Half */}
+          <div className="flex-1 border-b border-gray-700 overflow-hidden flex flex-col">
+            <SceneHierarchy />
+          </div>
+          {/* Object Library - Bottom Half */}
+          <div className="flex-1 overflow-y-auto">
+            <ObjectLibrary />
+          </div>
         </aside>
 
         {/* 3D Viewport */}
