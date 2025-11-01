@@ -59,13 +59,13 @@ export function calculateVisualFeedback(
   isSelected: boolean = false,
   isHovered: boolean = false
 ): VisualFeedbackState {
-  // Priority 1: Collision (critical state)
+  // Priority 1: Collision (critical state - enhanced with strong glow)
   if (isColliding) {
     return {
       color: VISUAL_FEEDBACK_COLORS.collision,
       opacity: VISUAL_FEEDBACK_OPACITY.collision,
       emissive: VISUAL_FEEDBACK_COLORS.collision,
-      emissiveIntensity: 0.2,
+      emissiveIntensity: 0.5, // Increased from 0.2 for stronger warning
     };
   }
 
