@@ -20,11 +20,11 @@ type SortMode = 'hierarchy' | 'type' | 'name';
  */
 function getObjectIcon(type: ObjectType): string {
   const icons: Record<ObjectType, string> = {
-    camera: '📷',
-    bin: '📦',
-    obstacle: '🚧',
-    robot: '🤖',
-    gripper: '🦾',
+    camera: '◉',
+    bin: '▢',
+    obstacle: '◆',
+    robot: '◍',
+    gripper: '◓',
   };
   return icons[type];
 }
@@ -195,7 +195,7 @@ export function SceneHierarchy() {
                 }
               `}
             >
-              {mode === 'hierarchy' ? '🌳' : mode === 'type' ? '📋' : '🔤'}
+              {mode === 'hierarchy' ? '⋮' : mode === 'type' ? '≡' : 'A→Z'}
             </button>
           ))}
         </div>

@@ -10,13 +10,14 @@ import type { ObjectType } from '../types';
 /**
  * Object type base colors
  * Following design principles: Configuration over code
+ * Professional, muted colors for industrial simulation
  */
 export const OBJECT_TYPE_COLORS: Record<ObjectType, string> = {
-  camera: '#3b82f6',
-  bin: '#ef4444',
-  obstacle: '#f59e0b',
-  robot: '#8b5cf6',
-  gripper: '#ec4899',
+  camera: '#60a5fa', // Light blue (professional camera equipment)
+  bin: '#94a3b8', // Neutral gray (industrial container)
+  obstacle: '#fb923c', // Muted orange (safety barrier)
+  robot: '#a78bfa', // Soft purple (robotic system)
+  gripper: '#f472b6', // Soft pink (tool/accessory)
 };
 
 /**

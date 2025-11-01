@@ -80,7 +80,7 @@ export function Layout({ children, onViewArchitecture }: LayoutProps) {
             disabled={objects.length === 0}
             aria-label="Save current scene to JSON file"
           >
-            💾 Save
+            Save
           </Button>
           <Button 
             variant="secondary" 
@@ -89,7 +89,7 @@ export function Layout({ children, onViewArchitecture }: LayoutProps) {
             isLoading={isLoading}
             aria-label="Load scene from JSON file"
           >
-            📂 Load
+            Load
           </Button>
           {onViewArchitecture && (
             <Button
@@ -98,7 +98,7 @@ export function Layout({ children, onViewArchitecture }: LayoutProps) {
               onClick={onViewArchitecture}
               aria-label="View architecture documentation"
             >
-              📚 Docs
+              Docs
             </Button>
           )}
         </div>
@@ -112,14 +112,12 @@ export function Layout({ children, onViewArchitecture }: LayoutProps) {
             tabs={[
               {
                 id: 'hierarchy',
-                label: 'Hierarchy',
-                icon: '🌳',
+                label: 'Scene',
                 content: <SceneHierarchy />,
               },
               {
                 id: 'library',
-                label: 'Library',
-                icon: '📦',
+                label: 'Objects',
                 content: <ObjectLibrary />,
               },
             ]}
@@ -130,32 +128,28 @@ export function Layout({ children, onViewArchitecture }: LayoutProps) {
         {/* 3D Viewport */}
         <main className="flex-1 relative overflow-hidden">{children}</main>
 
-        {/* Right Sidebar - Inspector (Properties/Paths/Simulation/View) */}
+        {/* Right Sidebar - Properties/Paths/Simulation/View */}
         <aside className="w-72 bg-gray-800 border-l border-gray-700 shadow-xl flex-shrink-0">
           <TabbedPanel
             tabs={[
               {
                 id: 'properties',
-                label: 'Inspector',
-                icon: '⚙️',
+                label: 'Properties',
                 content: <PropertiesPanel />,
               },
               {
                 id: 'paths',
                 label: 'Paths',
-                icon: '🛤️',
                 content: <PathPanel />,
               },
               {
                 id: 'simulation',
-                label: 'Simulation',
-                icon: '▶️',
+                label: 'Sim',
                 content: <SimulationPanel />,
               },
               {
                 id: 'view',
                 label: 'View',
-                icon: '👁️',
                 content: <ViewPanel />,
               },
             ]}

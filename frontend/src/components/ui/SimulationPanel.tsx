@@ -94,7 +94,7 @@ export function SimulationPanel() {
                 className="w-full"
                 aria-label={canStart ? 'Start robot simulation' : 'Resume robot simulation'}
               >
-                {canStart ? '▶ Start Simulation' : '▶ Resume'}
+                {canStart ? 'Start Simulation' : 'Resume'}
               </Button>
             )}
             {canPause && (

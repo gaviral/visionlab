@@ -37,18 +37,17 @@ export function TabbedPanel({ tabs, defaultTab }: TabbedPanelProps) {
               role="tab"
               aria-selected={isActive}
               aria-controls={`${tab.id}-panel`}
-              className={`
-                flex-1 px-4 py-3 text-sm font-medium transition-all duration-150
-                ${
-                  isActive
-                    ? 'text-blue-400 border-b-2 border-blue-500 bg-gray-800'
-                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/30'
-                }
-              `}
-            >
-              {tab.icon && <span className="mr-2">{tab.icon}</span>}
-              {tab.label}
-            </button>
+                  className={`
+                    flex-1 px-4 py-3 text-sm font-medium transition-all duration-150
+                    ${
+                      isActive
+                        ? 'text-blue-400 border-b-2 border-blue-500 bg-gray-800'
+                        : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/30'
+                    }
+                  `}
+                >
+                  {tab.label}
+                </button>
           );
         })}
       </div>

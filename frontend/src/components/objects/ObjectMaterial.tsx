@@ -34,6 +34,10 @@ export function ObjectMaterial({
     isHovered
   );
 
+  // PBR material properties for professional, realistic look
+  const metalness = type === 'robot' || type === 'gripper' ? 0.6 : 0.2;
+  const roughness = type === 'camera' ? 0.3 : type === 'bin' ? 0.7 : 0.5;
+
   return (
     <meshStandardMaterial
       color={color}
@@ -42,6 +46,8 @@ export function ObjectMaterial({
       wireframe={wireframe}
       emissive={emissive || '#000000'}
       emissiveIntensity={emissiveIntensity || 0}
+      metalness={metalness}
+      roughness={roughness}
     />
   );
 }

@@ -88,21 +88,21 @@ export function ViewPanel() {
             description="Show camera field of view (FOV) cones"
             enabled={viewSettings.showFrustums}
             onToggle={toggleFrustums}
-            icon="📷"
+            icon="◇"
           />
           <ToggleButton
             label="Path Lines"
             description="Show robot movement paths and waypoints"
             enabled={viewSettings.showPaths}
             onToggle={togglePaths}
-            icon="🛤️"
+            icon="―"
           />
           <ToggleButton
             label="Collision Indicators"
             description="Highlight objects with collisions in red"
             enabled={viewSettings.showCollisions}
             onToggle={toggleCollisions}
-            icon="⚠️"
+            icon="⬢"
           />
         </div>
       </Card>
